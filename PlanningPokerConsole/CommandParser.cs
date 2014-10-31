@@ -3,65 +3,109 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PlanningPokerConsole
 {
     public class CommandParser
     {
         public const string SERVER = "http://ghpp.mikaelec.com";
+
+
+        public void GameLoop()
+        {
+            Game g = null;
+            while (g == null)
+            {
+                Console.WriteLine("Commands:\ncreategame [name]\njoingame [gameid] [name]\njoinclipboard [name]\n\n");
+                g = lobbyParse(Console.ReadLine());
+
+            }
+            while (true)
+            {
+                Console.Clear();
+
+                Console.WriteLine("GAME {0}\n\n", g.Id.Hash);
+                PrintVotes(g);
+
+                Console.WriteLine("\n\n");
+
+                if (g.Host)
+                {
+                    
+                    Console.WriteLine("Commands:\nvote [vote]\nclearvotes");
+                }
+                else
+                    Console.WriteLine("Commands:\nvote [vote]");
+                GameParse(Console.ReadLine(), g);
+
+                Console.ReadLine();
+            }
+        }
+
+
         public Game lobbyParse(string input)
         {
             string[] s = input.Split(' ');
 
             Game game = null;
 
-            while (game == null)
+            switch (s[0])
             {
-                switch (s[0])
-                {
-                    case "creategame":
-                        game = CreateGame(s[1]);
-                        break;
-                    case "joingame":
-                        game = JoinGame(s[1], s[2]);
-                        break;
-                    default:
-                        break;
-                }
+                case "creategame":
+                    game = CreateGame(s[1]);
+                    Console.WriteLine("Game successfully created with id {0}\nCopy to clipboard? y/n", game.Id.Hash);
+                    if (Console.ReadLine() == "y")
+                        Clipboard.SetText(game.Id.Hash);
+                    break;
+                case "joingame":
+                    game = JoinGame(s[1], s[2]);
+                    Console.WriteLine("Game successfully joined");
+                    break;
+                case "joinclipboard":
+                    game = JoinGame(Clipboard.GetText(), s[1]);
+                    break;
+                default:
+                    Console.WriteLine("Unknown command");
+                    break;
             }
+
 
             return game;
         }
+
 
         public void GameParse(string input, Game g)
         {
             string[] s = input.Split(' ');
 
-            while (true)
+            switch (s[0])
             {
-                try
-                {
-                    switch (s[0])
-                    {
-                        case "vote":
+                case "vote":
+                    VoteTypes v = VoteValid(s[1]);
+                    if (v != VoteTypes.Zero)
+                        g.Vote(v);
+                    else Console.WriteLine("Invalid vote");
+                    break;
+                case "clearvotes":
+                    if (g.Host)
+                        g.ResetGame();
+                    else Console.WriteLine("You need to be host of the game to do that");
 
-                            VoteTypes v = VoteValid(s[1]);
-                            g.Vote(v);
-                            break;
-                        case "clearvotes":
-                            if (g.Host)
-                                g.ResetGame();
-                            else throw new ArgumentException("You are not the host");
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                catch (ArgumentException e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-                
+                    break;
+                default:
+                    Console.WriteLine("Unknown command");
+                    break;
+            }
+        }
+
+        private void PrintVotes(Game g)
+        {
+            var votes = g.Votes;
+
+            foreach (var vote in votes)
+            {
+                Console.WriteLine("{0}: {1}", vote.Key, vote.Value);
             }
         }
 
@@ -74,8 +118,7 @@ namespace PlanningPokerConsole
                 return vt;
             else
             {
-                Console.WriteLine("Not valid vote");
-                throw new ArgumentException("Not valid vote");
+                return default(VoteTypes);
             }
 
 

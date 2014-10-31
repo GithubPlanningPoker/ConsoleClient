@@ -8,8 +8,12 @@ namespace PlanningPokerConsole
 {
     class Program
     {
+
+        [STAThread]
         static void Main(string[] args)
         {
+            CommandParser cp = new CommandParser();
+            cp.GameLoop();
         }
     }
 }
