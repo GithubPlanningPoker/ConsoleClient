@@ -38,8 +38,6 @@ namespace PlanningPokerConsole
                 else
                     Console.WriteLine("Commands:\nvote [vote]");
                 GameParse(Console.ReadLine(), g);
-
-                Console.ReadLine();
             }
         }
 
@@ -91,7 +89,8 @@ namespace PlanningPokerConsole
                     if (g.Host)
                         g.ResetGame();
                     else Console.WriteLine("You need to be host of the game to do that");
-
+                    break;
+                case "":
                     break;
                 default:
                     Console.WriteLine("Unknown command");
