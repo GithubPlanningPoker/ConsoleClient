@@ -17,7 +17,7 @@ namespace PlanningPokerConsole
             Game g = null;
             while (g == null)
             {
-                Console.WriteLine("Commands:\ncreategame [name]\njoingame [gameid] [name]\njoinclipboard [name]\n\n");
+                Console.WriteLine("Commands:\ncreategame [username]\njoingame [gameid] [username]\njoinclipboard [username]\n\n");
                 g = lobbyParse(Console.ReadLine());
 
             }
@@ -26,13 +26,13 @@ namespace PlanningPokerConsole
                 Console.Clear();
 
                 Console.WriteLine("GAME {0}\n\n", g.Id.Hash);
+                Console.WriteLine(g.Description);
                 PrintVotes(g);
 
                 Console.WriteLine("\n\n");
 
                 if (g.Host)
-                {
-                    
+                {                    
                     Console.WriteLine("Commands:\nvote [vote]\nclearvotes");
                 }
                 else
@@ -90,8 +90,11 @@ namespace PlanningPokerConsole
                         g.ResetGame();
                     else Console.WriteLine("You need to be host of the game to do that");
                     break;
-                case "":
+                case "description":
+                    if (g.Host)
+                        g.Description = String.Join(" ", s.ToList().GetRange(1, s.Count()-1));
                     break;
+                case "":
                 default:
                     Console.WriteLine("Unknown command");
                     break;
