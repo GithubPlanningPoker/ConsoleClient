@@ -26,19 +26,31 @@ namespace PlanningPokerConsole
                 Console.Clear();
 
                 Console.WriteLine("GAME {0}\n\n", g.Id.Hash);
-                Console.WriteLine(g.Description);
+
+                printDescription(g);
+
+                Console.WriteLine("\n");
+
                 PrintVotes(g);
 
                 Console.WriteLine("\n\n");
 
                 if (g.Host)
                 {                    
-                    Console.WriteLine("Commands:\nvote [vote]\nclearvotes");
+                    Console.WriteLine("Commands:\nvote [vote]\nclearvotes\ndescription [content]");
                 }
                 else
                     Console.WriteLine("Commands:\nvote [vote]");
                 GameParse(Console.ReadLine(), g);
             }
+        }
+
+        private static void printDescription(Game g)
+        {
+            Console.WriteLine("DESCRIPTION:");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(g.Description);
+            Console.ResetColor();
         }
 
 
@@ -63,8 +75,9 @@ namespace PlanningPokerConsole
                 case "joinclipboard":
                     game = JoinGame(Clipboard.GetText(), s[1]);
                     break;
+                case "":
                 default:
-                    Console.WriteLine("Unknown command");
+                    printUnknowCommand();
                     break;
             }
             return game;
@@ -85,7 +98,7 @@ namespace PlanningPokerConsole
                     break;
                 case "clearvotes":
                     if (g.Host)
-                        g.ResetGame();
+                        g.ClearVotes();
                     else Console.WriteLine("You need to be host of the game to do that");
                     break;
                 case "description":
@@ -94,15 +107,39 @@ namespace PlanningPokerConsole
                     break;
                 case "":
                 default:
-                    Console.WriteLine("Unknown command");
+                    printUnknowCommand();
                     break;
             }
         }
 
+        private static void printUnknowCommand()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Unknown command(Press any key to continue)");
+            Console.ResetColor();
+            Console.ReadLine();
+        }
+
         private void PrintVotes(Game g)
         {
+            Console.ForegroundColor = ConsoleColor.Green;
+            int notVoted = g.Votes.Count(x => x.Value == null);
+            int voted = g.Votes.Count();
+            if (notVoted != 0)
+            {
+                foreach (var vote in g.Votes)
+                {
+                    if (vote.Key == g.User)
+                        Console.WriteLine("{0}: {1}", vote.Key, vote.Value);
+                    Console.WriteLine("{0}: {1}", vote.Key, "***");
+                }
+                Console.WriteLine(voted-notVoted + "/" + voted + " have voted.");
+                Console.ResetColor();
+                return;
+            }
             foreach (var vote in g.Votes)
                 Console.WriteLine("{0}: {1}", vote.Key, vote.Value);
+            Console.ResetColor();
         }
 
         private VoteTypes VoteValid(string vote)
