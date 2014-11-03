@@ -67,8 +67,6 @@ namespace PlanningPokerConsole
                     Console.WriteLine("Unknown command");
                     break;
             }
-
-
             return game;
         }
 
@@ -103,27 +101,17 @@ namespace PlanningPokerConsole
 
         private void PrintVotes(Game g)
         {
-            var votes = g.Votes;
-
-            foreach (var vote in votes)
-            {
+            foreach (var vote in g.Votes)
                 Console.WriteLine("{0}: {1}", vote.Key, vote.Value);
-            }
         }
 
         private VoteTypes VoteValid(string vote)
         {
             VoteTypes vt;
-
-
             if (VoteTypesExtension.TryParse(vote, out vt))
                 return vt;
             else
-            {
                 return default(VoteTypes);
-            }
-
-
         }
 
         private Game JoinGame(string hash, string name)
@@ -135,12 +123,5 @@ namespace PlanningPokerConsole
         {
             return Game.CreateGame(SERVER, name);
         }
-
-
-        public void Parse(string input)
-        {
-
-        }
-
     }
 }
