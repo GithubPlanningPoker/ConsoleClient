@@ -17,6 +17,8 @@ namespace PlanningPokerConsole
             Game g = null;
             while (g == null)
             {
+                Console.Clear();
+                header();
                 Console.WriteLine("Commands:\ncreategame [username]\njoingame [gameid] [username]\njoinclipboard [username]\n\n");
                 g = lobbyParse(Console.ReadLine());
 
@@ -24,6 +26,8 @@ namespace PlanningPokerConsole
             while (true)
             {
                 Console.Clear();
+
+                header();
 
                 Console.WriteLine("GAME {0}\n\n", g.Id.Hash);
 
@@ -43,6 +47,31 @@ namespace PlanningPokerConsole
                     Console.WriteLine("Commands:\nvote [vote]");
                 GameParse(Console.ReadLine(), g);
             }
+        }
+
+        private static void header()
+        {
+            for (int i = 0; i < Console.WindowWidth; i++)
+                Console.Write("#");
+            char[] edges = new char[Console.WindowWidth];
+            edges[0] = '#';
+            edges[edges.Count() - 1] = '#';
+            Console.Write(edges);
+            char[] title = "GitHub Planning Poker".ToArray();
+            char[] titleWithEdges = new char[edges.Count()];
+            Array.Copy(edges, titleWithEdges, edges.Count());
+            for (int i = 0; i < title.Count(); i++)
+                titleWithEdges[((titleWithEdges.Count() / 2) - 1) - ((title.Count() / 2)) + i] = title[i];
+            for (int i = 0; i < titleWithEdges.Count(); i++)
+            {                
+                if (i > 0 && i < titleWithEdges.Count() - 1)
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write(titleWithEdges[i]);
+                Console.ResetColor();
+            }
+            Console.Write(edges);
+            for (int i = 0; i < Console.WindowWidth; i++)
+                Console.Write("#");
         }
 
         private static void printDescription(Game g)
