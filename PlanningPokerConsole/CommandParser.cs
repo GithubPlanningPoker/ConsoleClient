@@ -29,11 +29,13 @@ namespace PlanningPokerConsole
 
                 header();
 
-                Console.WriteLine("GAME {0}\n\n", g.Id.Hash);
+                Console.WriteLine();
+                printTextInCenter("GAME: " + g.Id.Hash);
+                Console.WriteLine();
 
                 printDescription(g);
 
-                Console.WriteLine("\n");
+                Console.WriteLine();
 
                 PrintVotes(g);
 
@@ -74,10 +76,21 @@ namespace PlanningPokerConsole
                 Console.Write("#");
         }
 
+        private static void printTextInCenter(string s, ConsoleColor color = ConsoleColor.White)
+        {
+            Console.ForegroundColor = color;
+            char[] text = s.ToArray();
+            char[] line = new char[Console.WindowWidth];
+            for (int i = 0; i < text.Count(); i++)
+                line[((line.Count() / 2) - 1) - ((text.Count() / 2)) + i] = text[i];
+            Console.Write(line);
+            Console.ResetColor();
+        }
+
         private static void printDescription(Game g)
         {
             Console.WriteLine("DESCRIPTION:");
-            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(g.Description);
             Console.ResetColor();
         }
@@ -155,14 +168,14 @@ namespace PlanningPokerConsole
             int notVoted = g.Votes.Count(x => x.Value == null);
             int voted = g.Votes.Count();
             if (notVoted != 0)
-            {
+            {                
+                printTextInCenter("VOTES (" + (voted - notVoted) + "/" + voted + " have voted)", ConsoleColor.Green);
                 foreach (var vote in g.Votes)
                 {
                     if (vote.Key == g.User)
                         Console.WriteLine("{0}: {1}", vote.Key, vote.Value);
                     Console.WriteLine("{0}: {1}", vote.Key, "***");
                 }
-                Console.WriteLine(voted-notVoted + "/" + voted + " have voted.");
                 Console.ResetColor();
                 return;
             }
