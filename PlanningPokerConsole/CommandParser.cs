@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Library;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -165,22 +166,22 @@ namespace PlanningPokerConsole
         private void PrintVotes(Game g)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            int notVoted = g.Votes.Count(x => x.Value == null);
+            int notVoted = g.Votes.Count(x => x.VoteType == null);
             int voted = g.Votes.Count();
             if (notVoted != 0)
             {                
                 printTextInCenter("VOTES (" + (voted - notVoted) + "/" + voted + " have voted)", ConsoleColor.Green);
                 foreach (var vote in g.Votes)
                 {
-                    if (vote.Key == g.User)
-                        Console.WriteLine("{0}: {1}", vote.Key, vote.Value);
-                    Console.WriteLine("{0}: {1}", vote.Key, "***");
+                    if (vote.Name == g.User.Name)
+                        Console.WriteLine("{0}: {1}", vote.Name, vote.VoteType);
+                    Console.WriteLine("{0}: {1}", vote.Name, "***");
                 }
                 Console.ResetColor();
                 return;
             }
             foreach (var vote in g.Votes)
-                Console.WriteLine("{0}: {1}", vote.Key, vote.Value);
+                Console.WriteLine("{0}: {1}", vote.Name, vote.VoteType);
             Console.ResetColor();
         }
 
