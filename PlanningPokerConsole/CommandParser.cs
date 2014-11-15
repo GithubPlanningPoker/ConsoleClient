@@ -43,6 +43,7 @@ namespace PlanningPokerConsole
                 ConsoleGraphics.PrintTextInCenter("GAME: " + game.Id.Hash);
                 Console.WriteLine();
 
+                ConsoleGraphics.PrintTitle(game);
                 ConsoleGraphics.PrintDescription(game);
 
                 Console.WriteLine();
@@ -107,6 +108,12 @@ namespace PlanningPokerConsole
                 case "clearvotes":
                     if(game.Host)
                         game.ClearVotes();
+                    else
+                        Console.WriteLine("You are not the host.");
+                    break;
+                case "kick":
+                    if (game.Host)
+                        game.Kick(s[1]);
                     else
                         Console.WriteLine("You are not the host.");
                     break;

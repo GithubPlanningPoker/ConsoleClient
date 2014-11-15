@@ -48,9 +48,15 @@ namespace PlanningPokerConsole
         public static void PrintDescription(Game g)
         {
             Console.WriteLine("DESCRIPTION:");
-            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(g.Description);
-            Console.ResetColor();
+            Console.WriteLine();
+        }
+
+        public static void PrintTitle(Game g)
+        {
+            Console.WriteLine("TITLE:");
+            Console.WriteLine(g.Title);
+            Console.WriteLine();
         }
 
         public static void PrintUnknowCommand()
@@ -93,7 +99,7 @@ namespace PlanningPokerConsole
         public static void PrintGameCommands(Game g)
         {
             if (g.Host)
-                Console.WriteLine(printCommandsHeader() + printVoteCommand() + printClearVotesCommand() + printTitleCommand() + printDescriptionCommand());
+                Console.WriteLine(printCommandsHeader() + printVoteCommand() + printTitleCommand() + printDescriptionCommand() + printClearVotesCommand() + printKickCommand());
             else
                 Console.WriteLine(printCommandsHeader() + printVoteCommand() + printTitleCommand() + printDescriptionCommand());
         }
@@ -122,6 +128,11 @@ namespace PlanningPokerConsole
         private static string printDescriptionCommand()
         {
             return printCommands("description", "");
+        }
+
+        private static string printKickCommand()
+        {
+            return printCommands("kick", "[username]");
         }
 
         private static string printTitleCommand()
