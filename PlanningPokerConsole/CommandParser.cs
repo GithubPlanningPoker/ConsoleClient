@@ -123,6 +123,11 @@ namespace PlanningPokerConsole
                 case "description":
                     changeDescription(game);
                     break;
+                case "publish":
+                    GithubIssues gi = new GithubIssues();
+                    gi.Login("343e6297fe72a7769c7539781fca7191f7b08439");
+                    gi.PostIssue(game.Title, game.Description, s[1], s[2]);
+                    break;
                 case "":
                 default:
                     ConsoleGraphics.PrintUnknowCommand();
