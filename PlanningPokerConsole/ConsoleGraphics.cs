@@ -95,7 +95,7 @@ namespace PlanningPokerConsole
             if (g.Host)
                 Console.WriteLine(printCommandsHeader() + printVoteCommand() + printClearVotesCommand() + printDescriptionCommand());
             else
-                Console.WriteLine(printCommandsHeader() + printVoteCommand());
+                Console.WriteLine(printCommandsHeader() + printVoteCommand() + printDescriptionCommand());
         }
 
         public static void PrintInputString()

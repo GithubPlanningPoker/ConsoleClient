@@ -10,8 +10,9 @@ namespace PlanningPokerConsole
 {
     public class CommandParser
     {
-        //public const string SERVER = "http://ghpp.brunothalmann.com";
-        public const string SERVER = "http://ghpp.mikaelec.com/api";
+        public const string SERVER = "http://ghpp.brunothalmann.com";
+        //public const string SERVER = "http://ghpp.mikaelec.com/api";
+        //public const string SERVER = "http://localhost:52450";
 
         public void GameLoop()
         {
@@ -91,13 +92,10 @@ namespace PlanningPokerConsole
                     else Console.WriteLine("Invalid vote");
                     break;
                 case "clearvotes":
-                    if (g.Host)
-                        g.ClearVotes();
-                    else Console.WriteLine("You need to be host of the game to do that");
+                    g.ClearVotes();
                     break;
                 case "description":
-                    if (g.Host)
-                        g.Description = String.Join(" ", s.ToList().GetRange(1, s.Count()-1));
+                    g.Description = String.Join(" ", s.ToList().GetRange(1, s.Length-1));
                     break;
                 case "":
                 default:
