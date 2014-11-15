@@ -92,7 +92,7 @@ namespace PlanningPokerConsole
             return game;
         }
 
-        public void GameParse(string input, Game g)
+        public void GameParse(string input, Game game)
         {
             string[] s = input.Split(' ');
 
@@ -101,15 +101,20 @@ namespace PlanningPokerConsole
                 case "vote":
                     VoteTypes v = VoteValid(s[1]);
                     if (v != VoteTypes.Zero)
-                        g.Vote(v);
+                        game.Vote(v);
                     else Console.WriteLine("Invalid vote");
                     break;
                 case "clearvotes":
-                    g.ClearVotes();
+                    if(game.Host)
+                        game.ClearVotes();
+                    else
+                        Console.WriteLine("You are not the host.");
+                    break;
+                case "title":
+                    game.Title = String.Join(" ", s.ToList().GetRange(1, s.Length-1));
                     break;
                 case "description":
-                    //g.Description = String.Join(" ", s.ToList().GetRange(1, s.Length-1));
-                    changeDescription();
+                    changeDescription(game);
                     break;
                 case "":
                 default:
@@ -118,9 +123,12 @@ namespace PlanningPokerConsole
             }
         }
 
-        private void changeDescription()
+        private void changeDescription(Game g)
         {
-            Process.Start("description.txt");
+            var p = Process.Start("description.txt");
+            p.WaitForExit();
+            if (p.HasExited)
+                g.Description = File.ReadAllText("description.txt");
         }
 
         private Game JoinGame(string hash, string name)

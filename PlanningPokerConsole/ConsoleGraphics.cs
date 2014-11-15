@@ -93,9 +93,9 @@ namespace PlanningPokerConsole
         public static void PrintGameCommands(Game g)
         {
             if (g.Host)
-                Console.WriteLine(printCommandsHeader() + printVoteCommand() + printClearVotesCommand() + printDescriptionCommand());
+                Console.WriteLine(printCommandsHeader() + printVoteCommand() + printClearVotesCommand() + printTitleCommand() + printDescriptionCommand());
             else
-                Console.WriteLine(printCommandsHeader() + printVoteCommand() + printDescriptionCommand());
+                Console.WriteLine(printCommandsHeader() + printVoteCommand() + printTitleCommand() + printDescriptionCommand());
         }
 
         public static void PrintInputString()
@@ -121,7 +121,12 @@ namespace PlanningPokerConsole
 
         private static string printDescriptionCommand()
         {
-            return printCommands("description", "[content]");
+            return printCommands("description", "");
+        }
+
+        private static string printTitleCommand()
+        {
+            return printCommands("title", "[content]");
         }
 
         private static string printClearVotesCommand()
