@@ -64,23 +64,25 @@ namespace PlanningPokerConsole
         public static void PrintVotes(Game g)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            int notVoted = g.Votes.Count(x => x.VoteType == null);
-            int voted = g.Votes.Count();
-            if (notVoted != 0)
-            {
-                PrintTextInCenter("VOTES (" + (voted - notVoted) + "/" + voted + " have voted)", ConsoleColor.Green);
+            int notVoted = g.Votes.Count(x => x.HasVoted == false);
+            int votes = g.Votes.Count();
+                PrintTextInCenter("VOTES (" + (votes - notVoted) + "/" + votes + " have voted)", ConsoleColor.Green);
                 foreach (var vote in g.Votes)
                 {
-                    if (vote.Name == g.User.Name)
+                    if (vote.Name == g.User.Name && vote.HasVoted)
+                    {
                         Console.WriteLine("{0}: {1}", vote.Name, vote.VoteType);
-                    Console.WriteLine("{0}: {1}", vote.Name, "***");
+                        continue;
+                    }
+                    if (notVoted == 0)
+                    {
+                        Console.WriteLine("{0}: {1}", vote.Name, vote.VoteType);
+                        continue;
+                    }
+                    Console.WriteLine("{0}: {1}", vote.Name, "Not Voted");
                 }
                 Console.ResetColor();
                 return;
-            }
-            foreach (var vote in g.Votes)
-                Console.WriteLine("{0}: {1}", vote.Name, vote.VoteType);
-            Console.ResetColor();
         }
 
         public static void PrintLobbyCommands()
