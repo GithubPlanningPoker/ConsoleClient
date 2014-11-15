@@ -10,7 +10,8 @@ namespace PlanningPokerConsole
 {
     public class CommandParser
     {
-        public const string SERVER = "http://ghpp.brunothalmann.com";
+        //public const string SERVER = "http://ghpp.brunothalmann.com";
+        public const string SERVER = "http://ghpp.mikaelec.com/api";
 
         public void GameLoop()
         {
