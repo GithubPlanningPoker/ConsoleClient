@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.IO;
 
 namespace PlanningPokerConsole
 {
@@ -13,6 +15,11 @@ namespace PlanningPokerConsole
         public const string SERVER = "http://ghpp.brunothalmann.com";
         //public const string SERVER = "http://ghpp.mikaelec.com/api";
         //public const string SERVER = "http://localhost:52450";
+
+        public CommandParser()
+        {
+            //File.Create("description.txt");
+        }
 
         public void GameLoop()
         {
@@ -56,6 +63,12 @@ namespace PlanningPokerConsole
 
             Game game = null;
 
+            if (s.Length == 1)
+            {
+                ConsoleGraphics.PrintUnknowCommand();
+                GameLoop();
+            }
+
             switch (s[0])
             {
                 case "creategame":
@@ -95,13 +108,19 @@ namespace PlanningPokerConsole
                     g.ClearVotes();
                     break;
                 case "description":
-                    g.Description = String.Join(" ", s.ToList().GetRange(1, s.Length-1));
+                    //g.Description = String.Join(" ", s.ToList().GetRange(1, s.Length-1));
+                    changeDescription();
                     break;
                 case "":
                 default:
                     ConsoleGraphics.PrintUnknowCommand();
                     break;
             }
+        }
+
+        private void changeDescription()
+        {
+            Process.Start("description.txt");
         }
 
         private Game JoinGame(string hash, string name)
