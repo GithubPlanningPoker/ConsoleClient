@@ -12,8 +12,8 @@ namespace PlanningPokerConsole
 {
     public class CommandParser
     {
-        public const string SERVER = "http://ghpp.brunothalmann.com";
-        //public const string SERVER = "http://ghpp.mikaelec.com/api";
+        //public const string SERVER = "http://ghpp.brunothalmann.com";
+        public const string SERVER = "http://ghpp.mikaelec.com/api";
         //public const string SERVER = "http://localhost:52450";
 
         public CommandParser()
@@ -124,9 +124,8 @@ namespace PlanningPokerConsole
                     changeDescription(game);
                     break;
                 case "publish":
-                    GithubIssues gi = new GithubIssues();
-                    gi.Login("343e6297fe72a7769c7539781fca7191f7b08439");
-                    gi.PostIssue(game.Title, game.Description, s[1], s[2]);
+                    GithubPublisher gi = new GithubPublisher(File.ReadAllText("githubtoken"));
+                    gi.PostIssue(game, s[1], s[2]);
                     break;
                 case "":
                 default:

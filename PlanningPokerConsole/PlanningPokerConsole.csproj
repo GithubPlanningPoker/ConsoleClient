@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="CommandParser.cs" />
     <Compile Include="ConsoleGraphics.cs" />
+    <Compile Include="GithubPublisher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
