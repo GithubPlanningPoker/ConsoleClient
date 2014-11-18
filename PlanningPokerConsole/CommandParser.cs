@@ -124,7 +124,7 @@ namespace PlanningPokerConsole
                     changeDescription(game);
                     break;
                 case "publish":
-                    GithubPublisher gi = new GithubPublisher(File.ReadAllText("githubtoken"));
+                    GithubPublisher gi = new GithubPublisher(File.ReadAllText("githubtoken.txt"));
                     gi.PostIssue(game, s[1], s[2]);
                     break;
                 case "":
