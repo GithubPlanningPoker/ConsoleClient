@@ -16,6 +16,8 @@ namespace PlanningPokerConsole
         public const string SERVER = "http://ghpp.mikaelec.com/api";
         //public const string SERVER = "http://localhost:52450";
 
+        private static VoteTypes clientVote;
+
         public CommandParser()
         {
             //File.Create("description.txt");
@@ -44,11 +46,13 @@ namespace PlanningPokerConsole
                 Console.WriteLine();
 
                 ConsoleGraphics.PrintTitle(game);
+
+                saveDescription(game);
                 ConsoleGraphics.PrintDescription(game);
 
                 Console.WriteLine();
 
-                ConsoleGraphics.PrintVotes(game);
+                ConsoleGraphics.PrintVotes(game, clientVote);
 
                 Console.WriteLine("\n\n");
 
@@ -56,6 +60,11 @@ namespace PlanningPokerConsole
                 ConsoleGraphics.PrintInputString();
                 GameParse(Console.ReadLine(), game);
             }
+        }
+
+        private static void saveDescription(Game game)
+        {
+            File.WriteAllText("description.txt", game.Description);
         }
 
         public Game lobbyParse(string input)
@@ -100,9 +109,8 @@ namespace PlanningPokerConsole
             switch (s[0])
             {
                 case "vote":
-                    VoteTypes v = VoteValid(s[1]);
-                    if (v != VoteTypes.Zero)
-                        game.Vote(v);
+                    if(VoteTypesExtension.TryParse(s[1], out clientVote))
+                        game.Vote(clientVote);
                     else Console.WriteLine("Invalid vote");
                     break;
                 case "clearvotes":
@@ -150,15 +158,6 @@ namespace PlanningPokerConsole
         private Game CreateGame(string name)
         {
             return Game.CreateGame(SERVER, name);
-        }
-
-        private VoteTypes VoteValid(string vote)
-        {
-            VoteTypes vt;
-            if (VoteTypesExtension.TryParse(vote, out vt))
-                return vt;
-            else
-                return default(VoteTypes);
         }
     }
 }
